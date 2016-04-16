@@ -21,13 +21,15 @@ class Animal:
 		#direction = random.randint(0, 3)
 		if(direction == RIGHT):
 			level.checkCollision(xPos + 1, yPos)
-			xPos = xPos + 1
-		if(direction == LEFT):
+			xPos += 1
+		elif(direction == LEFT):
 			level.checkCollision(xPos - 1, yPos)
-			xPos = xPos - 1
-		if(direction == UP):
+			xPos -= 1
+		elif(direction == UP):
 			level.checkCollision(xPos, yPos - 1)
-			yPos = yPos - 1
-		if(direction == DOWN):
+			yPos += 1
+		elif(direction == DOWN):
 			level.checkCollision(xPos, yPos + 1)
-			ypos = yPos + 1
+			yPos -= 1 
+
+
