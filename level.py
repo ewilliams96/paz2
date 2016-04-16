@@ -1,8 +1,10 @@
 import pyglet
-from parameters import RIGHT, UP, LEFT, DOWN
+from math import floor
+
+from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE
 from player import Player
 from animal import Animal
-TILE_SIZE = 32
+from display import drawImage
 
 class Level:
 	def __init__(self):
@@ -20,14 +22,9 @@ class Level:
 			self.player.yPos -= 1
 
 	def draw(self):
-		grass = pyglet.resource.image('images/grass.png')
-		grass.width = 32
-		grass.height = 32
 		for i in range(20):
 			for j in range(15):
-				grass.blit(i*TILE_SIZE, j*TILE_SIZE)
+				drawImage('grass',i,j)
 		for animal in self.animalist:
-			animalImage = pyglet.resource.image('images/'+animal.name+'.png')
-			animalImage.width = 32
-			animalImage.height = 32
-			animalImage.blit(TILE_SIZE*(animal.xPos - self.player.xPos), TILE_SIZE*(animal.yPos - self.player.yPos))
+			drawImage(animal.name, animal.xPos - self.player.xPos, animal.yPos-self.player.yPos)
+		drawImage("player",floor(TILES_WIDE/2),floor(TILES_TALL/2))
