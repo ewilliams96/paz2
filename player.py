@@ -6,8 +6,8 @@ class Player:
 		self.muscle = 16 # kilograms
 
 		# initialize player to center of screen
-		self.x = 320
-		self.y = 240
+		self.xPos = 320
+		self.yPos = 240
 
 
 
