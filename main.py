@@ -11,7 +11,7 @@ window = pyglet.window.Window(640, 480, resizable=False, visible=True)
 def on_key_press(symbol, modifiers):
 	key = pyglet.window.key
 	if symbol == key.LEFT:
-		mappe.move(RIGHT)
+		mappe.move(LEFT)
 	elif symbol == key.RIGHT:
 		mappe.move(RIGHT)
 	elif symbol == key.UP:

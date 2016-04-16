@@ -13,11 +13,11 @@ class Level:
 		if (direction == RIGHT):
 			self.player.xPos += 1
 		elif (direction == UP):
-			self.player.y += 1
+			self.player.yPos += 1
 		elif (direction == LEFT):
 			self.player.xPos -= 1
 		elif (direction == DOWN):
-			self.player.y -= 1
+			self.player.yPos -= 1
 
 	def draw(self):
 		grass = pyglet.resource.image('images/grass.png')
@@ -30,4 +30,4 @@ class Level:
 			animalImage = pyglet.resource.image('images/'+animal.name+'.png')
 			animalImage.width = 32
 			animalImage.height = 32
-			animalImage.blit(animal.xPos*TILE_SIZE - self.player.xPos, animal.y*TILE_SIZE - self.player.y)
+			animalImage.blit(TILE_SIZE*(animal.xPos - self.player.xPos), TILE_SIZE*(animal.yPos - self.player.yPos))
