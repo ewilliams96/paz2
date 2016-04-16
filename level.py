@@ -6,7 +6,7 @@ TILE_SIZE = 32
 
 class Level:
 	def __init__(self):
-		self.animalist = [Animal(10,10)]
+		self.animalist = [Animal(10,10), Animal(1,0)]
 		self.player = Player()
 	
 	def move(self,direction):
