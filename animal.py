@@ -3,7 +3,13 @@ from parameters import *
 import level
 
 class Animal:
-	def __init(self, xPos, yPos, name=None, fat=None, muscle=None):
+	def __init__(self, xPos, yPos, name=None, fat=None, muscle=None):
+		if name == None:
+			name = 'seal'
+		if fat == None:
+			fat = random.randint(0,30)
+		if muscle == None:
+			muscle  = random.randint(0,30)
 		self.name = name
 		self.fat = fat
 		self.muscle = muscle
@@ -25,5 +31,3 @@ class Animal:
 		if(direction == DOWN):
 			level.checkCollision(xPos, yPos + 1)
 			ypos = yPos + 1
-
-

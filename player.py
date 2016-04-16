@@ -1,6 +1,6 @@
 class Player:
 
-	def __init(self):
+	def __init__(self):
 
 		self.fat = 16 # kilograms 
 		self.muscle = 16 # kilograms
