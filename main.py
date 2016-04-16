@@ -5,7 +5,7 @@ from parameters, import RIGHT, UP, LEFT, DOWN
 from level import Level
 
 mappe = Level()
-window = pyglet.window.Window()
+window = pyglet.window.Window(640, 480, resizable=True, visible=True)
 
 @window.event
 def on_key_press(symbol, modifiers):
