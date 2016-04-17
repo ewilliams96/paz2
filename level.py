@@ -10,7 +10,7 @@ from obstacle import Obstacle
 
 class Level:
 	def __init__(self):
-		self.animalist = [Animal(10,10), Animal(1,0)]
+		self.animalist = []
 		self.player = Player()
 		self.obstacles = [] # obstacles such as trees, rocks, etc 
 		self.mode = LEVEL
@@ -21,8 +21,6 @@ class Level:
 	# HANDLE KEY PRESS
 	def handlekey(self, symbol):
 		key = pyglet.window.key
-		print("key press")
-		print(self.mode)
 
 		if(self.mode == LEVEL):
 			if symbol == key.LEFT:
@@ -129,7 +127,6 @@ class Level:
 	def checkAnimals(self, animal):
 		if(abs(animal.xPos - self.player.xPos) > TILES_WIDE or
 			abs(animal.yPos - self.player.yPos) > TILES_TALL):
-			print("???")
 			self.animalist.remove(animal)
 			return False
 		else:
