@@ -5,6 +5,7 @@ from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BAT
 from player import Player
 from animal import Animal
 from display import drawTile, drawImage
+import random 
 
 class Level:
 	def __init__(self):
@@ -27,6 +28,8 @@ class Level:
 				self.move(UP)
 			elif symbol == key.DOWN:
 				self.move(DOWN)
+			for animal in self.animalist:
+				self.moveAnimal(animal)
 		elif(self.mode == BATTLE):
 			if symbol == key.A:
 				level.kill( attack() )
@@ -42,11 +45,12 @@ class Level:
 			self.battleDraw()
 
 	def move(self,direction):
+
 		if (direction == RIGHT):
 			collision = self.checkCollision(self.player.xPos + 1, self.player.yPos)
 			if(collision == Animal):
 				pass# enter battle 
-			#elif(colission == Obstacle):
+			#elif(collision == Obstacle):
 			#	pass# do nothing (can't move in this direction)
 			else:
 				self.player.xPos += 1
@@ -75,7 +79,7 @@ class Level:
 			
 			if(collision == Animal):
 				pass#enter battle
-			elif(collision == Obstacle):
+			#elif(collision == Obstacle):
 				pass# do nothing can't move
 			else:
 				self.player.yPos -= 1
@@ -94,8 +98,8 @@ class Level:
 
 
 	#  move animal 
-	def moveAnimal(animal):
-		pass#direction = random.randint(0, 3)
+	def moveAnimal(self, animal):
+		direction = random.randint(0, 3)
 		if(direction == RIGHT):
 			collision = self.checkCollision(animal.xPos + 1, animal.yPos)
 			if(collision == Player):
@@ -162,6 +166,7 @@ class Level:
 	def startBattle(animal, player=None, level=None):
 		self.battle_animal = animal
 		self.battleMessage = "You meet a " + a.name + " that has a mass of " + str(a.muscle + a.fat) +  "kg."
+		self.mode = BATTLE
 
 	def battleDraw(self):
 		drawImage(self.battle_animal.name, 320,240,200,200)
