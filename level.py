@@ -16,6 +16,9 @@ class Level:
 
 		self.battle_animal = None
 		self.battle_status = None
+	
+	def screenPosition(self):
+		retu
 
 	def handlekey(self, symbol):
 		key = key = pyglet.window.key
@@ -59,8 +62,8 @@ class Level:
 
 
 	def levelDraw(self):
-		for i in range(20):
-			for j in range(15):
+		for i in range(-floor(TILES_WIDE/2),floor(TILES_WIDE/2)):
+			for j in range(-floor(TILES_TALL/2),floor(TILES_TALL/2)):
 				drawTile('grass',i,j)
 		for animal in self.animalist:
 			exists = self.checkAnimals(animal)
@@ -68,7 +71,7 @@ class Level:
 				drawTile(animal.name, animal.xPos - self.player.xPos, animal.yPos-self.player.yPos)
 			else:
 				pass# don't draw animal if no longer exists 
-		drawTile("player",floor(TILES_WIDE/2),floor(TILES_TALL/2))
+		drawTile("player",0,0)
 
 
 	#  move animal 
@@ -78,22 +81,19 @@ class Level:
 
 
 	def checkAnimals(self, animal):
-		if(animal.xPos - self.player.xPos < 0 or animal.xPos - self.player.xPos > 20):
-			self.animalist.remove(animal)
-			return False
-		elif(animal.yPos - self.player.yPos < 0 or animal.yPos - self.player.yPos > 15):
+		if(abs(animal.xPos - self.player.xPos) > TILES_WIDE or
+			abs(animal.yPos - self.player.yPos) > TILES_TALL):
 			self.animalist.remove(animal)
 			return False
 		else:
 			return True
-		if(self.player.xPos == x and self.player.yPos == y):
-			return type(self.player)
 	# param - x, y to check 
 	# return object type if obj at x,y
 	# return None if no obj at x, y 
 	def checkCollision(self, x, y):
 		# check if animal still on screen, False if animal is no longer on screen
-
+		if(self.player.xPos == x and self.player.yPos == y):
+			return self.player
 		for animal in self.animalist:
 			if(animal.xPos == x and animal.yPos == y):
 				return animal
@@ -107,7 +107,7 @@ class Level:
 
 	def startBattle(self, animal):
 		self.battle_animal = animal
-		self.battleMessage = "You meet a " + a.name + " that has a mass of " + str(a.muscle + a.fat) +  "kg."
+		self.battleMessage = "You meet a " + animal.name + " that has a mass of " + str(animal.muscle + animal.fat) +  "kg."
 		self.mode = BATTLE
 
 
