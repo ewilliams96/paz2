@@ -51,7 +51,7 @@ class Level:
 			self.battleDraw()
 
 	def move(self,direction):
-
+		self.randomAnimals(direction)
 		attemptMoveX = self.player.xPos + direction[0]
 		attemptMoveY = self.player.yPos + direction[1]
 
@@ -68,7 +68,6 @@ class Level:
 		for i in range(-floor(TILES_WIDE/2),ceil(TILES_WIDE/2)):
 			for j in range(-floor(TILES_TALL/2),ceil(TILES_TALL/2)):
 				drawTile('grass',i,j)
-		self.randomAnimals()
 		for animal in self.animalist:
 			exists = self.checkAnimals(animal)
 			if(exists == True):
@@ -78,22 +77,53 @@ class Level:
 		drawTile("player",0,0)
 
 	# generate random animals onto list to draw on map
-	def randomAnimals(self):
-		while len(self.animalist) <= 7:
-			animalType = random.choice(ANIMAL_TYPES)
-			lowerBoundX = self.player.xPos - 15
-			lowerBoundY = self.player.yPos - 10
+	def randomAnimals(self,direction):
+		animalType = random.choice(ANIMAL_TYPES)
+		upper = [0,0]
+		lower = [0,0]
+		screenSize = [TILES_WIDE,TILES_TALL]
 
-			upperBoundX = self.player.xPos + 15
-			upperBoundY = self.player.yPos + 10
+		for i in [0,1]:
+			if direction[i] == 0:
+				lower[i] = - screenSize[i]
+				upper[i] =  screenSize[i]
+			elif direction[i] == -1:
+				lower[i] =  - screenSize[i]
+				upper[i] =  1- screenSize[i]
+			elif direction[i] == 1:
+				lower[i] =  screenSize[i]-1
+				upper[i] =  screenSize[i]
 
-			xLoc = random.randint(lowerBoundX, upperBoundX)
-			yLoc = random.randint(lowerBoundY, upperBoundY)
+		xLoc = self.player.xPos + random.randint(lower[0], upper[0])
+		yLoc = self.player.yPos + random.randint(lower[1], upper[1])
+
+		newAnimal = Animal(xLoc, yLoc, animalType)
+		self.animalist.append(newAnimal)
 
 
+	#  move animal 
+	def moveAnimal(self, animal):
+		direction = random.randint(0, 3)
+		
 
-			newAnimal = Animal(xLoc, yLoc, animalType)
-			self.animalist.append(newAnimal)
+
+	def checkAnimals(self, animal):
+		if(abs(animal.xPos - self.player.xPos) > TILES_WIDE or
+			abs(animal.yPos - self.player.yPos) > TILES_TALL):
+			print("???")
+			self.animalist.remove(animal)
+			return False
+		else:
+			return True
+	# param - x, y to check 
+	# return object type if obj at x,y
+	# return None if no obj at x, y 
+
+		xLoc = random.randint(lower[0], upper[0])
+		yLoc = random.randint(lower[1], upper[1])
+
+		newAnimal = Animal(xLoc, yLoc, animalType)
+		self.animalist.append(newAnimal)
 
 
 	#  move animal 
