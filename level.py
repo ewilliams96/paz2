@@ -46,43 +46,17 @@ class Level:
 
 	def move(self,direction):
 
-		if (direction == RIGHT):
-			collision = self.checkCollision(self.player.xPos + 1, self.player.yPos)
-			if(collision == Animal):
-				pass# enter battle 
-			#elif(collision == Obstacle):
-			#	pass# do nothing (can't move in this direction)
-			else:
-				self.player.xPos += 1
-		elif (direction == UP):
+		attemptMoveX = self.player.xPos + direction[0]
+		attemptMoveY = self.player.yPos + direction[1]
 
-			collision = self.checkCollision(self.player.xPos, self.player.yPos + 1)
+		result = self.checkCollision(attemptMoveX, attemptMoveY)
+		if isinstance(result, Animal):
+			self.startBattle(result)
+		elif result == None:
+			self.player.xPos = attemptMoveX
+			self.player.yPos = attemptMoveY
 
-			if(collision == Animal):
-				pass#enter battle
-			#elif(collision == Obstacle):
-			#	pass# do nothing can't move
-			else:
-				self.player.yPos += 1
-		elif (direction == LEFT):
-			collision = self.checkCollision(self.player.xPos - 1, self.player.yPos)
-			
-			if(collision == Animal):
-				pass#enter battle
-			#elif(collision == Obstacle):
-			#	pass# do nothing can't move
-			else:
-				self.player.xPos -= 1
 
-		elif (direction == DOWN):
-			collision = self.checkCollision(self.player.xPos, self.player.yPos - 1)
-			
-			if(collision == Animal):
-				pass#enter battle
-			#elif(collision == Obstacle):
-				pass# do nothing can't move
-			else:
-				self.player.yPos -= 1
 
 	def levelDraw(self):
 		for i in range(20):
@@ -100,39 +74,7 @@ class Level:
 	#  move animal 
 	def moveAnimal(self, animal):
 		direction = random.randint(0, 3)
-		if(direction == RIGHT):
-			collision = self.checkCollision(animal.xPos + 1, animal.yPos)
-			if(collision == Player):
-				pass#enter battle
-			elif(collision == Obstacle):
-				pass# do nothing can't move
-			else:
-				animal.xPos += 1
-		elif(direction == LEFT):
-			collision = self.checkCollision(animal.xPos - 1, animal.yPos)
-			if(collision == Player):
-				pass#enter battle
-			elif(collision == Obstacle):
-				pass# do nothing can't move
-			else:
-				animal.xPos -= 1
-		elif(direction == UP):
-			collision = self.checkCollision(animal.xPos, animal.yPos + 1)
-			if(collision == Player):
-				pass#enter battle
-			elif(collision == Obstacle):
-				pass# do nothing can't move
-			else:
-				animal.yPos += 1
-		elif(direction == DOWN):
-
-			collision = self.checkCollision(animal.xPos, animal.yPos - 1)
-			if(collision == Player):
-				pass#enter battle
-			elif(collision == Obstacle):
-				pass# do nothing can't move
-			else:
-				animal.yPos -= 1 
+		
 
 
 	def checkAnimals(self, animal):
@@ -154,7 +96,7 @@ class Level:
 
 		for animal in self.animalist:
 			if(animal.xPos == x and animal.yPos == y):
-				return type(animal)
+				return animal
 		'''
 		for obstacle in self.obstacles:
 			if(obstacle.xPos == x and obstacle.yPos == y):
@@ -163,10 +105,11 @@ class Level:
 
 		return None
 
-	def startBattle(animal, player=None, level=None):
+	def startBattle(self, animal):
 		self.battle_animal = animal
 		self.battleMessage = "You meet a " + a.name + " that has a mass of " + str(a.muscle + a.fat) +  "kg."
 		self.mode = BATTLE
+
 
 	def battleDraw(self):
 		drawImage(self.battle_animal.name, 320,240,200,200)
