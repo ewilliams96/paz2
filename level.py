@@ -74,6 +74,9 @@ class Level:
 		# may be a function of time instead of player movement in the future.
 		for animal in self.animalist:
 			self.moveAnimal(animal)
+		self.player.fat -= 1
+		if(self.player.fat < 0) or (self.player.fat > 127):
+			self.gameOver()
 
 	# draw the current level (scene). draws tiles and animals.
 	# eventually draw obstacles 		
@@ -122,7 +125,6 @@ class Level:
 	def moveAnimal(self, animal):
 		direction = random.randint(0, 3)
 		
-
 
 	def checkAnimals(self, animal):
 		if(abs(animal.xPos - self.player.xPos) > TILES_WIDE or
@@ -204,14 +206,12 @@ class Level:
 
 	# called when player attacks in battle (a key input)
 	def attack(self):
-		if(self.player.muscle > self.battle_animal.muscle):
+		if(self.player.muscle < self.battle_animal.muscle):
 			self.battleMessage = "The "+self.battle_animal.name+" kills and eats you.\n You died!"
 			self.battle_status = END
-
 		else:
 			self.player.fat += self.battle_animal.fat/2;
 			self.battleMessage = "You kill and eat the "+self.battle_animal.name+"."
-			
 			# remove animal from list after killed so not rendered again
 			self.animalist.remove(self.battle_animal)
 			# set to none to indicate battle finished on otherKey()
@@ -238,9 +238,9 @@ class Level:
 			return BATTLE
 
 
-
 	def gameOver(self):
 		skull = Animal(0, 0, "skull")
 		self.battle_animal = skull
 		self.battleMessage = "GAME OVER. "
-
+		self.battle_status = END
+		self.mode = BATTLE
