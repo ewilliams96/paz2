@@ -1,11 +1,11 @@
 import pyglet
 import random
 
-from parameters import RIGHT, UP, LEFT, DOWN,  LEVEL, BATTLE
+from parameters import RIGHT, UP, LEFT, DOWN,  LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT
 from level import Level
 
 mappe = Level()
-window = pyglet.window.Window(640, 480, resizable=False, visible=True)
+window = pyglet.window.Window(SCREEN_WIDTH, SCREEN_HEIGHT, resizable=False, visible=True)
 mode = LEVEL
 
 @window.event
