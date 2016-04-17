@@ -17,14 +17,11 @@ class Level:
 		self.battle_animal = None
 		self.battle_status = None
 	
-	def screenPosition(self):
-		retu
-
 	def handlekey(self, symbol):
 		key = pyglet.window.key
 		print("key press")
 		print(self.mode)
-		
+
 		if(self.mode == LEVEL):
 			if symbol == key.LEFT:
 				self.move(LEFT)
