@@ -78,29 +78,53 @@ class Level:
 	def moveAnimal(animal):
 		#direction = random.randint(0, 3)
 		if(direction == RIGHT):
-			checkCollision(animal.xPos + 1, animal.yPos)
-			animal.xPos += 1
+			collision = checkCollision(animal.xPos + 1, animal.yPos)
+			if(collision == Player:
+				#enter battle
+			elif(collision == Obstacle):
+				# do nothing can't move
+			else:
+				animal.xPos += 1
 		elif(direction == LEFT):
-			level.checkCollision(animal.xPos - 1, animal.yPos)
-			animal.xPos -= 1
+			collision = level.checkCollision(animal.xPos - 1, animal.yPos)
+			if(collision == Player:
+				#enter battle
+			elif(collision == Obstacle):
+				# do nothing can't move
+			else:
+				animal.xPos -= 1
 		elif(direction == UP):
-			level.checkCollision(animal.xPos, animal.yPos - 1)
-			animal.yPos += 1
+			collision = level.checkCollision(animal.xPos, animal.yPos + 1)
+			if(collision == Player:
+				#enter battle
+			elif(collision == Obstacle):
+				# do nothing can't move
+			else:
+				animal.yPos += 1
 		elif(direction == DOWN):
-			level.checkCollision(animal.xPos, animal.yPos + 1)
-			animal.yPos -= 1 
+
+			collision = level.checkCollision(animal.xPos, animal.yPos - 1)
+			if(collision == Player:
+				#enter battle
+			elif(collision == Obstacle):
+				# do nothing can't move
+			else:
+				animal.yPos -= 1 
 
 
 	# param - x, y to check 
 	# return object type if obj at x,y
 	# return None if no obj at x, y 
 	def checkCollision(x, y):
+		if(self.player.xPos == x and self.player.yPos == y):
+			return type(self.player)
+
 		for animal in self.animalist:
-			if(animal.xPos == x && animal.yPos == y):
+			if(animal.xPos == x and animal.yPos == y):
 				return type(animal)
 
 		for obstacle in self.obstacles:
-			if(obstacle.xPos == x && obstacle.yPos == y):
+			if(obstacle.xPos == x and obstacle.yPos == y):
 				return type(obstacle)
 
 		return None
