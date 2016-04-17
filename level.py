@@ -1,5 +1,5 @@
 import pyglet
-from math import floor
+from math import floor, ceil
 
 from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END, WIN, IN_PROG, ANIMAL_TYPES
 from player import Player
@@ -62,8 +62,8 @@ class Level:
 
 
 	def levelDraw(self):
-		for i in range(-floor(TILES_WIDE/2),floor(TILES_WIDE/2)):
-			for j in range(-floor(TILES_TALL/2),floor(TILES_TALL/2)):
+		for i in range(-floor(TILES_WIDE/2),ceil(TILES_WIDE/2)):
+			for j in range(-floor(TILES_TALL/2),ceil(TILES_TALL/2)):
 				drawTile('grass',i,j)
 		self.randomAnimals()
 		for animal in self.animalist:
