@@ -3,7 +3,7 @@ from math import floor, ceil
 
 from parameters import TILE_SCALE, TILES_WIDE, TILES_TALL
 
-images = {name: pyglet.resource.image('images/'+name+'.png') for name in ['seal','grass','bird','player','pig','skull']}
+images = {name: pyglet.resource.image('images/'+name+'.png') for name in ['seal','grass','bird','player','pig','skull','rock']}
 sprite = pyglet.sprite.Sprite
 
 def drawTile(name,x,y):

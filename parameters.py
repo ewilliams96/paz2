@@ -3,6 +3,9 @@ RIGHT = [1,0]
 UP = [0,1]
 LEFT = [-1,0]
 DOWN = [0,-1]
+
+#direction list
+DIR_LIST = [RIGHT, UP, LEFT, DOWN]
 #modes
 LEVEL = True
 BATTLE = False

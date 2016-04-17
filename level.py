@@ -1,11 +1,12 @@
 import pyglet
 from math import floor, ceil
 
-from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END, WIN, IN_PROG, ANIMAL_TYPES
+from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END, WIN, IN_PROG, ANIMAL_TYPES, DIR_LIST
 from player import Player
 from animal import Animal
 from display import drawTile, drawImage, drawText
 import random 
+from obstacle import Obstacle
 
 class Level:
 	def __init__(self):
@@ -36,9 +37,15 @@ class Level:
 				self.moveAnimal(animal)
 		elif(self.mode == BATTLE):
 			if symbol == key.A:
-				self.attack()
+				if self.battle_status == IN_PROG:
+					self.attack()
+				else:
+					self.mode = self.otherKey()
 			elif symbol == key.R:
-				self.run()
+				if self.battle_status == IN_PROG:
+					self.run()
+				else:
+					self.mode = self.otherKey()
 			else:
 				self.mode = self.otherKey()
 	
@@ -58,16 +65,28 @@ class Level:
 		result = self.checkCollision(attemptMoveX, attemptMoveY)
 		if isinstance(result, Animal):
 			self.startBattle(result)
-		elif result == None:
+		elif isinstance(result, Obstacle):
+			pass # no movement when hitting an obstacle 
+		elif result == None: 
+			# nothing encountered, move normally
 			self.player.xPos = attemptMoveX
 			self.player.yPos = attemptMoveY
 
+		# randomly move animals every time player moves. 
+		# may be a function of time instead of player movement in the future.
+		for animal in self.animalist:
+			self.moveAnimal(animal)
 
-
+	# draw the current level (scene). draws tiles and animals.
+	# eventually draw obstacles 		
 	def levelDraw(self):
+		# populate screen with grass tiles 
 		for i in range(-floor(TILES_WIDE/2),ceil(TILES_WIDE/2)):
 			for j in range(-floor(TILES_TALL/2),ceil(TILES_TALL/2)):
 				drawTile('grass',i,j)
+		# populate screen with rocks
+		while len(self.obstacles) < 8:
+			for i in range(8):
 		for animal in self.animalist:
 			exists = self.checkAnimals(animal)
 			if(exists == True):
@@ -128,18 +147,34 @@ class Level:
 
 	#  move animal 
 	def moveAnimal(self, animal):
-		direction = random.randint(0, 3)
-		
+		direction = random.choice(DIR_LIST)
+		attemptMoveX = animal.xPos + direction[0]
+		attemptMoveY = animal.yPos + direction[1]
+
+		# is there something on this spot? if so, return it 
+		thing = self.checkCollision(attemptMoveX, attemptMoveY)
+		if(isinstance(thing, Animal)):
+			pass
+		elif(isinstance(thing, Player)):
+			self.startBattle(animal)
+		elif(isinstance(thing, Obstacle)):
+			pass
+		else:
+			animal.xPos = attemptMoveX
+			animal.yPos = attemptMoveY
 
 
+
+	# check if animal is still on screen, remove it from animal list if out of range of player 
 	def checkAnimals(self, animal):
 		if(abs(animal.xPos - self.player.xPos) > TILES_WIDE or
 			abs(animal.yPos - self.player.yPos) > TILES_TALL):
-			print("???")
 			self.animalist.remove(animal)
 			return False
 		else:
 			return True
+
+
 	# param - x, y to check 
 	# return object type if obj at x,y
 	# return None if no obj at x, y 
@@ -170,7 +205,7 @@ class Level:
 		drawImage(self.battle_animal.name, 320,240,200,200)
 		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH)
 
-	# result of attack in battle mode
+	# called when player attacks in battle (a key input)
 	def attack(self):
 		if(self.player.muscle > self.battle_animal.muscle):
 			self.battleMessage = "The "+self.battle_animal.name+" kills and eats you.\n You died!"
@@ -186,20 +221,22 @@ class Level:
 			self.battle_status = WIN
 
 
-			
+	# called when player attacks in a battle (r key input)		
 	def run(self):
 		self.battleMessage = "You run away from the " + self.battle_animal.name+"."
 		# indicate battle is over on next key press 
 		self.battle_status = WIN
 
 
-
+	# when any other key pressed during battle mode 
 	def otherKey(self):
+		# if battle was won/successful, return to map mode
 		if(self.battle_status == WIN):
 			return LEVEL
-		# if game over screen
+		# if battle lost, game over screen
 		if(self.battle_status == END):
 			self.gameOver()
+		# if still in battle, stay in battle until 'a' or 'r' input
 		if(self.battle_status == IN_PROG):
 			return BATTLE
 
