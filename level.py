@@ -1,7 +1,7 @@
 import pyglet
 from math import floor
 
-from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END, WIN, IN_PROG
+from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END, WIN, IN_PROG, ANIMAL_TYPES
 from player import Player
 from animal import Animal
 from display import drawTile, drawImage, drawText
@@ -65,6 +65,7 @@ class Level:
 		for i in range(-floor(TILES_WIDE/2),floor(TILES_WIDE/2)):
 			for j in range(-floor(TILES_TALL/2),floor(TILES_TALL/2)):
 				drawTile('grass',i,j)
+		self.randomAnimals()
 		for animal in self.animalist:
 			exists = self.checkAnimals(animal)
 			if(exists == True):
@@ -72,6 +73,24 @@ class Level:
 			else:
 				pass# don't draw animal if no longer exists 
 		drawTile("player",0,0)
+
+	# generate random animals onto list to draw on map
+	def randomAnimals(self):
+		while len(self.animalist) <= 7:
+			animalType = random.choice(ANIMAL_TYPES)
+			lowerBoundX = self.player.xPos - 15
+			lowerBoundY = self.player.yPos - 10
+
+			upperBoundX = self.player.xPos + 15
+			upperBoundY = self.player.yPos + 10
+
+			xLoc = random.randint(lowerBoundX, upperBoundX)
+			yLoc = random.randint(lowerBoundY, upperBoundY)
+
+
+
+			newAnimal = Animal(xLoc, yLoc, animalType)
+			self.animalist.append(newAnimal)
 
 
 	#  move animal 
@@ -114,7 +133,6 @@ class Level:
 
 	def battleDraw(self):
 		drawImage(self.battle_animal.name, 320,240,200,200)
-		#display_label(battleMessage)
 		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH)
 
 	# result of attack in battle mode
@@ -137,7 +155,7 @@ class Level:
 	def run(self):
 		self.battleMessage = "You run away from the " + self.battle_animal.name+"."
 		# indicate battle is over on next key press 
-		self.battle_animal = None
+		self.battle_status = WIN
 
 	def otherKey(self):
 		if(self.battle_status == WIN):

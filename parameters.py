@@ -16,3 +16,5 @@ TILES_TALL = SCREEN_HEIGHT/TILE_SCALE
 END = 1 
 WIN = 0
 IN_PROG = -1
+
+ANIMAL_TYPES = ['bird', 'pig', 'seal']
