@@ -205,7 +205,7 @@ class Level:
 
 	def battleDraw(self):
 		drawImage(self.battle_animal.name, 320,240,200,200)
-		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH)
+		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH - 20)
 
 	# called when player attacks in battle (a key input)
 	def attack(self):
