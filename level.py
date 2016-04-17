@@ -17,6 +17,7 @@ class Level:
 		self.battle_animal = None
 		self.battle_status = None
 	
+	# HANDLE KEY PRESS
 	def handlekey(self, symbol):
 		key = pyglet.window.key
 		print("key press")
@@ -41,6 +42,8 @@ class Level:
 			else:
 				self.mode = self.otherKey()
 	
+### LEVEL MODE DRAWING AND FUNCTIONS 
+
 	def draw(self):
 		if(self.mode == LEVEL):
 			self.levelDraw()
@@ -125,10 +128,12 @@ class Level:
 
 		return None
 
+### BATTLE MODE FUNCTIONS ###
 	def startBattle(self, animal):
 		self.battle_animal = animal
 		self.battleMessage = "You meet a " + animal.name + " that has a mass of " + str(animal.muscle + animal.fat) +  "kg."
 		self.mode = BATTLE
+		self.battle_status = IN_PROG
 
 
 	def battleDraw(self):
@@ -157,6 +162,8 @@ class Level:
 		# indicate battle is over on next key press 
 		self.battle_status = WIN
 
+
+
 	def otherKey(self):
 		if(self.battle_status == WIN):
 			return LEVEL
@@ -164,7 +171,8 @@ class Level:
 		if(self.battle_status == END):
 			self.gameOver()
 		if(self.battle_status == IN_PROG):
-			pass
+			return BATTLE
+
 
 
 	def gameOver(self):
