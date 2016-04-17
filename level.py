@@ -37,9 +37,15 @@ class Level:
 				self.moveAnimal(animal)
 		elif(self.mode == BATTLE):
 			if symbol == key.A:
-				self.attack()
+				if self.battle_status == IN_PROG:
+					self.attack()
+				else:
+					self.mode = self.otherKey()
 			elif symbol == key.R:
-				self.run()
+				if self.battle_status == IN_PROG:
+					self.run()
+				else:
+					self.mode = self.otherKey()
 			else:
 				self.mode = self.otherKey()
 	
@@ -74,10 +80,25 @@ class Level:
 	# draw the current level (scene). draws tiles and animals.
 	# eventually draw obstacles 		
 	def levelDraw(self):
+		# populate screen with grass tiles 
 		for i in range(-floor(TILES_WIDE/2),ceil(TILES_WIDE/2)):
 			for j in range(-floor(TILES_TALL/2),ceil(TILES_TALL/2)):
 				drawTile('grass',i,j)
+		# populate screen with rocks
+		while len(self.obstacles) < 8:
+			for i in range(8):
+				rockX = random.randint(0, TILES_WIDE)
+				rockY = random.randint(0, TILES_TALL)
+				rock = Obstacle(rockX, rockY, "rock")
+				self.obstacles.append(rock)
+
+		# draw obstacles from obstacle list
+		for obstacle in self.obstacles:
+			drawTile(obstacle.name, obstacle.xPos, obstacle.yPos)
+
+		# populate animal list		
 		self.randomAnimals()
+		# draw animals from animal list
 		for animal in self.animalist:
 			exists = self.checkAnimals(animal)
 			if(exists == True):
@@ -167,7 +188,7 @@ class Level:
 		drawImage(self.battle_animal.name, 320,240,200,200)
 		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH)
 
-	# result of attack in battle mode
+	# called when player attacks in battle (a key input)
 	def attack(self):
 		if(self.player.muscle > self.battle_animal.muscle):
 			self.battleMessage = "The "+self.battle_animal.name+" kills and eats you.\n You died!"
@@ -183,20 +204,22 @@ class Level:
 			self.battle_status = WIN
 
 
-			
+	# called when player attacks in a battle (r key input)		
 	def run(self):
 		self.battleMessage = "You run away from the " + self.battle_animal.name+"."
 		# indicate battle is over on next key press 
 		self.battle_status = WIN
 
 
-
+	# when any other key pressed during battle mode 
 	def otherKey(self):
+		# if battle was won/successful, return to map mode
 		if(self.battle_status == WIN):
 			return LEVEL
-		# if game over screen
+		# if battle lost, game over screen
 		if(self.battle_status == END):
 			self.gameOver()
+		# if still in battle, stay in battle until 'a' or 'r' input
 		if(self.battle_status == IN_PROG):
 			return BATTLE
 
