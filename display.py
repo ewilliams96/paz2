@@ -1,5 +1,5 @@
 import pyglet
-from math import floor
+from math import floor, ceil
 
 from parameters import TILE_SCALE, TILES_WIDE, TILES_TALL
 
