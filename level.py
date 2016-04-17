@@ -85,8 +85,8 @@ class Level:
 			for j in range(-floor(TILES_TALL/2),ceil(TILES_TALL/2)):
 				drawTile('grass',i,j)
 		# populate screen with rocks
-		while len(self.obstacles) < 8:
-			for i in range(8):
+		#while len(self.obstacles) < 8:
+		#	for i in range(8):
 		for animal in self.animalist:
 			exists = self.checkAnimals(animal)
 			if(exists == True):
