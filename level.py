@@ -1,10 +1,10 @@
 import pyglet
 from math import floor
 
-from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE
+from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END
 from player import Player
 from animal import Animal
-from display import drawTile, drawImage
+from display import drawTile, drawImage, drawText
 import random 
 
 class Level:
@@ -35,11 +35,11 @@ class Level:
 				self.moveAnimal(animal)
 		elif(self.mode == BATTLE):
 			if symbol == key.A:
-				level.kill( attack() )
+				self.attack()
 			elif symbol == key.R:
-				level.kill( run() )
+				self.run()
 			else:
-				self.mode = battleMode.otherKey()
+				self.mode = self.otherKey()
 	
 	def draw(self):
 		if(self.mode == LEVEL):
@@ -114,16 +114,38 @@ class Level:
 	def battleDraw(self):
 		drawImage(self.battle_animal.name, 320,240,200,200)
 		#display_label(battleMessage)
+		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH)
 
+	# result of attack in battle mode
 	def attack(self):
-		if(self.player.muscle > self.animal.muscle):
-			self.battleMessage = "The "+self.animal.name+" kills and eats you.\n You died!"
-			return 0
+		if(self.player.muscle > self.battle_animal.muscle):
+			self.battleMessage = "The "+self.battle_animal.name+" kills and eats you.\n You died!"
+			self.gameOver()
+
 		else:
-			self.player.fat += self.animal.fat/2;
-			self.battleMessage = "You kill and eat the "+self.animal.name+"."
-			return 1
-	
+			self.player.fat += self.battle_animal.fat/2;
+			self.battleMessage = "You kill and eat the "+self.battle_animal.name+"."
+			
+			# remove animal from list after killed so not rendered again
+			self.animalist.remove(self.battle_animal)
+			# set to none to indicate battle finished on otherKey()
+			self.battle_animal = None
+
+			
+	def run(self):
+		self.battleMessage = "You run away from the " + self.battle_animal.name+"."
+		# indicate battle is over on next key press 
+		self.battle_animal = None
+
 	def otherKey(self):
-		if(self.animal==None):
+		if(self.battle_animal==None):
 			return LEVEL
+		# if game over screen
+		if(self.battle_status == END):
+			pass
+
+	def gameOver(self):
+		skull = Animal(0, 0, skull)
+		self.battle_animal = skull
+		self.battleMessage = "GAME OVER. "
+

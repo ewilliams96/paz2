@@ -19,7 +19,8 @@ def drawImage(name,x,y,width,height):
 	image.height = height
 	image.anchor_x = width/2
 	image.anchor_y = height/2
-	image.blit(TILE_SCALE*x,TILE_SCALE*y)
+	image.blit(x,y)
 
 def drawText(string,x,y,width):
-	text = pyglet.text.Label(string, font_name='Courier', font_size=18, x=x, y=y, anchor_y='center', width=width, multiline=True)
+	text = pyglet.text.Label(string, font_name='Courier', font_size=18, x=x, y=y, anchor_x='center', width=width, multiline=True)
+	text.draw()
