@@ -74,7 +74,10 @@ class Level:
 		# may be a function of time instead of player movement in the future.
 		for animal in self.animalist:
 			self.moveAnimal(animal)
-		self.player.fat -= 1
+
+		# decrease fat every x amount of steps
+		self.player.fatDecrease()
+
 		if(self.player.fat < 0) or (self.player.fat > 127):
 			self.gameOver()
 
