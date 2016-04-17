@@ -25,9 +25,10 @@ def drawImage(name,x,y,width,height):
 	image.anchor_x = width/2
 	image.anchor_y = height/2
 	image = sprite(image,
-		x=TILE_SCALE*x,
-		y=TILE_SCALE*y)
+		x=x,
+		y=y)
 	image.draw()
 
 def drawText(string,x,y,width):
-	text = pyglet.text.Label(string, font_name='Courier', font_size=18, x=x, y=y, anchor_y='center', width=width, multiline=True)
+	text = pyglet.text.Label(string, font_name='Courier', font_size=18, x=x, y=y, anchor_x='center', width=width, multiline=True)
+	text.draw()

@@ -1,10 +1,10 @@
 import pyglet
 from math import floor
 
-from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE
+from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END, WIN, IN_PROG, ANIMAL_TYPES
 from player import Player
 from animal import Animal
-from display import drawTile, drawImage
+from display import drawTile, drawImage, drawText
 import random 
 
 class Level:
@@ -17,11 +17,11 @@ class Level:
 		self.battle_animal = None
 		self.battle_status = None
 	
-	def screenPosition(self):
-		retu
-
 	def handlekey(self, symbol):
-		key = key = pyglet.window.key
+		key = pyglet.window.key
+		print("key press")
+		print(self.mode)
+
 		if(self.mode == LEVEL):
 			if symbol == key.LEFT:
 				self.move(LEFT)
@@ -35,11 +35,11 @@ class Level:
 				self.moveAnimal(animal)
 		elif(self.mode == BATTLE):
 			if symbol == key.A:
-				level.kill( attack() )
+				self.attack()
 			elif symbol == key.R:
-				level.kill( run() )
+				self.run()
 			else:
-				self.mode = battleMode.otherKey()
+				self.mode = self.otherKey()
 	
 	def draw(self):
 		if(self.mode == LEVEL):
@@ -65,6 +65,7 @@ class Level:
 		for i in range(-floor(TILES_WIDE/2),floor(TILES_WIDE/2)):
 			for j in range(-floor(TILES_TALL/2),floor(TILES_TALL/2)):
 				drawTile('grass',i,j)
+		self.randomAnimals()
 		for animal in self.animalist:
 			exists = self.checkAnimals(animal)
 			if(exists == True):
@@ -72,6 +73,24 @@ class Level:
 			else:
 				pass# don't draw animal if no longer exists 
 		drawTile("player",0,0)
+
+	# generate random animals onto list to draw on map
+	def randomAnimals(self):
+		while len(self.animalist) <= 7:
+			animalType = random.choice(ANIMAL_TYPES)
+			lowerBoundX = self.player.xPos - 15
+			lowerBoundY = self.player.yPos - 10
+
+			upperBoundX = self.player.xPos + 15
+			upperBoundY = self.player.yPos + 10
+
+			xLoc = random.randint(lowerBoundX, upperBoundX)
+			yLoc = random.randint(lowerBoundY, upperBoundY)
+
+
+
+			newAnimal = Animal(xLoc, yLoc, animalType)
+			self.animalist.append(newAnimal)
 
 
 	#  move animal 
@@ -83,6 +102,7 @@ class Level:
 	def checkAnimals(self, animal):
 		if(abs(animal.xPos - self.player.xPos) > TILES_WIDE or
 			abs(animal.yPos - self.player.yPos) > TILES_TALL):
+			print("???")
 			self.animalist.remove(animal)
 			return False
 		else:
@@ -113,17 +133,42 @@ class Level:
 
 	def battleDraw(self):
 		drawImage(self.battle_animal.name, 320,240,200,200)
-		#display_label(battleMessage)
+		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH)
 
+	# result of attack in battle mode
 	def attack(self):
-		if(self.player.muscle > self.animal.muscle):
-			self.battleMessage = "The "+self.animal.name+" kills and eats you.\n You died!"
-			return 0
+		if(self.player.muscle > self.battle_animal.muscle):
+			self.battleMessage = "The "+self.battle_animal.name+" kills and eats you.\n You died!"
+			self.battle_status = END
+
 		else:
-			self.player.fat += self.animal.fat/2;
-			self.battleMessage = "You kill and eat the "+self.animal.name+"."
-			return 1
-	
+			self.player.fat += self.battle_animal.fat/2;
+			self.battleMessage = "You kill and eat the "+self.battle_animal.name+"."
+			
+			# remove animal from list after killed so not rendered again
+			self.animalist.remove(self.battle_animal)
+			# set to none to indicate battle finished on otherKey()
+			self.battle_status = WIN
+
+
+			
+	def run(self):
+		self.battleMessage = "You run away from the " + self.battle_animal.name+"."
+		# indicate battle is over on next key press 
+		self.battle_status = WIN
+
 	def otherKey(self):
-		if(self.animal==None):
+		if(self.battle_status == WIN):
 			return LEVEL
+		# if game over screen
+		if(self.battle_status == END):
+			self.gameOver()
+		if(self.battle_status == IN_PROG):
+			pass
+
+
+	def gameOver(self):
+		skull = Animal(0, 0, "skull")
+		self.battle_animal = skull
+		self.battleMessage = "GAME OVER. "
+
