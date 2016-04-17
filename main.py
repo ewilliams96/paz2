@@ -11,30 +11,12 @@ mode = LEVEL
 @window.event
 def on_key_press(symbol, modifiers):
 	key = pyglet.window.key
-	if(mode == LEVEL):
-		if symbol == key.LEFT:
-			mode = mappe.move(LEFT)
-		elif symbol == key.RIGHT:
-			mode = mappe.move(RIGHT)
-		elif symbol == key.UP:
-			mode = mappe.move(UP)
-		elif symbol == key.DOWN:
-			mode = mappe.move(DOWN)
-	elif(mode == BATTLE):
-		if symbol == key.A:
-			level.kill( battleMode.attack() )
-		elif symbol == key.R:
-			level.kill( battleMode.run() )
-		else:
-			mode = battleMode.otherKey()
+	mappe.handlekey(symbol)
 	
 @window.event
 def on_draw():
 	window.clear()
-	if(mode=='level'):
-		mappe.draw()
-	elif(mode=='battle'):
-		battlemode.draw()
+	mappe.draw()
 		
 
 pyglet.app.run()

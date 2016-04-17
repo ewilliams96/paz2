@@ -1,8 +1,8 @@
 #directions
-RIGHT = 0
-UP = 1
-LEFT = 2
-DOWN = 3
+RIGHT = [1,0]
+UP = [0,1]
+LEFT = [-1,0]
+DOWN = [0,-1]
 #modes
 LEVEL = True
 BATTLE = False
