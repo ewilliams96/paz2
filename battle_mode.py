@@ -10,8 +10,6 @@ y_pos = 240
 
 
 class BattleMode:
-
-
 	attackMessage = "attack"
 	runMessage = "run"
 	def center_image(image):
@@ -23,38 +21,41 @@ class BattleMode:
 		self.player = None
 		self.battleMessage = None
 		self.level = None
+		self.animal = None
 
 	def startBattle(animal, player=None, level=None):
-		
-		
-		imageName = 'images/' + animal.name + ".png"
-		self.image = pyglet.resource.image(imageName)
-		
+		self.animal = animal
 		self.image.width = 200
 		self.image.height = 200
 		center_image(image)
-		
-		
+
 		self.battleMessage = "You meet a " + a.name + " that has a mass of " + str(a.muscle + a.fat) +  "kg."
 		
 
-	def battleModeDraw():
-		image.blit()
+	def draw():
+		display.drawImage(self.enemy)
 		display_label(battleMessage)
 
 	def attack():
-		Display.
-
+		if(self.player.muscle > self.animal.muscle):
+			self.battleMessage = "The "+self.animal.name+" kills and eats you.\n You died!"
+			return 0
+		else:
+			self.player.fat += self.animal.fat/2;
+			self.battleMessage = "You kill and eat the "+self.animal.name+"."
+			return 1
+	
+	def otherKey():
+		if(self.animal==None):
+			return LEVEL
+		else:
+			return BATTLE
 
 	def run():
-		Displa. 
+		self.player.fat -= 1
+			self.battleMessage = "You run from the "+self.animal.name+"."
 
-
-
-	
-
-
-
+'''
 def display_label(string, x=None, y=None):
 	label = pyglet.text.Label(string,
                           font_name='Courier',
@@ -87,4 +88,4 @@ def display_label(string, x=None, y=None):
 
 pyglet.app.run()
 
-
+'''

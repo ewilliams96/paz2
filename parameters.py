@@ -3,6 +3,9 @@ RIGHT = 0
 UP = 1
 LEFT = 2
 DOWN = 3
+#modes
+LEVEL = True
+BATTLE = False
 
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480

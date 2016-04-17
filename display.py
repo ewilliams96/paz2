@@ -2,7 +2,6 @@ import pyglet
 
 from parameters import TILE_SCALE
 
-window = pyglet.window.Window(640, 480, resizable=False, visible=True)
 images = {name: pyglet.resource.image('images/'+name+'.png') for name in ['seal','grass','bird','player','pig']}
 
 def drawTile(name,x,y):
@@ -21,3 +20,5 @@ def drawImage(name,x,y,width,height):
 	image.anchor_y = height/2
 	image.blit(TILE_SCALE*x,TILE_SCALE*y)
 
+def drawText(string,x,y,width):
+	text = pyglet.text.Label(string, font_name='Courier', font_size=18, x=x, y=y, anchor_y='center', width=width, multiline=True)
