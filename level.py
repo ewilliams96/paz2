@@ -1,7 +1,7 @@
 import pyglet
 from math import floor
 
-from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END
+from parameters import RIGHT, UP, LEFT, DOWN, TILES_TALL, TILES_WIDE, LEVEL, BATTLE, SCREEN_WIDTH, SCREEN_HEIGHT, END, WIN, IN_PROG
 from player import Player
 from animal import Animal
 from display import drawTile, drawImage, drawText
@@ -21,7 +21,10 @@ class Level:
 		retu
 
 	def handlekey(self, symbol):
-		key = key = pyglet.window.key
+		key = pyglet.window.key
+		print("key press")
+		print(self.mode)
+		
 		if(self.mode == LEVEL):
 			if symbol == key.LEFT:
 				self.move(LEFT)
@@ -83,6 +86,7 @@ class Level:
 	def checkAnimals(self, animal):
 		if(abs(animal.xPos - self.player.xPos) > TILES_WIDE or
 			abs(animal.yPos - self.player.yPos) > TILES_TALL):
+			print("???")
 			self.animalist.remove(animal)
 			return False
 		else:
@@ -120,7 +124,7 @@ class Level:
 	def attack(self):
 		if(self.player.muscle > self.battle_animal.muscle):
 			self.battleMessage = "The "+self.battle_animal.name+" kills and eats you.\n You died!"
-			self.gameOver()
+			self.battle_status = END
 
 		else:
 			self.player.fat += self.battle_animal.fat/2;
@@ -129,7 +133,8 @@ class Level:
 			# remove animal from list after killed so not rendered again
 			self.animalist.remove(self.battle_animal)
 			# set to none to indicate battle finished on otherKey()
-			self.battle_animal = None
+			self.battle_status = WIN
+
 
 			
 	def run(self):
@@ -138,14 +143,17 @@ class Level:
 		self.battle_animal = None
 
 	def otherKey(self):
-		if(self.battle_animal==None):
+		if(self.battle_status == WIN):
 			return LEVEL
 		# if game over screen
 		if(self.battle_status == END):
+			self.gameOver()
+		if(self.battle_status == IN_PROG):
 			pass
 
+
 	def gameOver(self):
-		skull = Animal(0, 0, skull)
+		skull = Animal(0, 0, "skull")
 		self.battle_animal = skull
 		self.battleMessage = "GAME OVER. "
 
