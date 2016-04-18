@@ -88,16 +88,24 @@ class Level:
 		for i in range(-floor(TILES_WIDE/2),ceil(TILES_WIDE/2)):
 			for j in range(-floor(TILES_TALL/2),ceil(TILES_TALL/2)):
 				drawTile('grass',i,j)
+
 		# populate screen with rocks
 		#while len(self.obstacles) < 8:
 		#	for i in range(8):
+
 		for animal in self.animalist:
 			exists = self.checkAnimals(animal)
 			if(exists == True):
 				drawTile(animal.name, animal.xPos - self.player.xPos, animal.yPos-self.player.yPos)
 			else:
 				pass# don't draw animal if no longer exists 
+
+		#draw player tile
 		drawTile("player",0,0)
+
+		#display player stats on map
+		playerStatString = "Muscle: " + str(self.player.muscle) + "kg\nFat: " + str(self.player.fat) + "kg."
+		drawText(playerStatString, SCREEN_WIDTH*.9, 32, SCREEN_WIDTH*.2, 12)
 
 	# generate random animals onto list to draw on map
 	def randomAnimals(self,direction):
@@ -205,7 +213,7 @@ class Level:
 
 	def battleDraw(self):
 		drawImage(self.battle_animal.name, 320,240,200,200)
-		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH - 20)
+		drawText(self.battleMessage, SCREEN_WIDTH/2, SCREEN_HEIGHT/4, SCREEN_WIDTH - 20, 18)
 
 	# called when player attacks in battle (a key input)
 	def attack(self):

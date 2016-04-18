@@ -29,6 +29,10 @@ def drawImage(name,x,y,width,height):
 		y=y)
 	image.draw()
 
-def drawText(string,x,y,width):
-	text = pyglet.text.Label(string, font_name='Courier', font_size=18, x=x, y=y, anchor_x='center', width=width, multiline=True)
+def drawText(string,x,y,width, font_size=None):
+	if font_size == None:
+		font_size = 18
+	else:
+		font_size = font_size
+	text = pyglet.text.Label(string, font_name='Courier', font_size=font_size, x=x, y=y, anchor_x='center', width=width, multiline=True)
 	text.draw()
