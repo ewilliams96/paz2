@@ -198,7 +198,7 @@ class Level:
 ### BATTLE MODE FUNCTIONS ###
 	def startBattle(self, animal):
 		self.battle_animal = animal
-		self.battleMessage = "You meet a " + animal.name + " that has a mass of " + str(animal.muscle + animal.fat) +  "kg."
+		self.battleMessage = "You meet a " + animal.name + " that has a mass of " + str(animal.muscle + animal.fat) +  "kg.\nYour muscle is " + str(self.player.muscle) + "kg and your fat is " + str(self.player.fat) + "kg."
 		self.mode = BATTLE
 		self.battle_status = IN_PROG
 
