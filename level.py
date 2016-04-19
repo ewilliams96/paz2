@@ -78,7 +78,7 @@ class Level:
 		# decrease fat every x amount of steps
 		self.player.fatDecrease()
 
-		if(self.player.fat < 0) or (self.player.fat > 127):
+		if(self.player.fat <= 0) or (self.player.fat > 127):
 			self.gameOver()
 
 	# draw the current level (scene). draws tiles and animals.
@@ -232,9 +232,9 @@ class Level:
 			if gains < 0:
 				gains = 0
 			round(gains, 3)
-			print(gains)
+
 			self.player.muscle += gains
-			print(self.player.muscle)
+	
 			self.battleMessage = "You kill and eat the "+self.battle_animal.name+"."
 			# remove animal from list after killed so not rendered again
 			self.animalist.remove(self.battle_animal)
