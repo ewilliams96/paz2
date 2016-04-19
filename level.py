@@ -105,7 +105,7 @@ class Level:
 
 		#display player stats on map
 		playerStatString = "Muscle: " + str(self.player.muscle) + "kg\nFat: " + str(self.player.fat) + "kg."
-		drawText(playerStatString, SCREEN_WIDTH*.9, 32, SCREEN_WIDTH*.2, 12)
+		drawText(playerStatString, SCREEN_WIDTH*.90, 32, SCREEN_WIDTH*.25, 12)
 
 	# generate random animals onto list to draw on map
 	def randomAnimals(self,direction):
@@ -217,11 +217,24 @@ class Level:
 
 	# called when player attacks in battle (a key input)
 	def attack(self):
+		# u lose
 		if(self.player.muscle < self.battle_animal.muscle):
 			self.battleMessage = "The "+self.battle_animal.name+" kills and eats you.\n You died!"
 			self.battle_status = END
+
+		# victory
 		else:
+			#increment fat
 			self.player.fat += self.battle_animal.fat/2;
+
+			#increment muscle
+			gains = self.battle_animal.muscle - self.player.muscle *.3
+			if gains < 0:
+				gains = 0
+			round(gains, 3)
+			print(gains)
+			self.player.muscle += gains
+			print(self.player.muscle)
 			self.battleMessage = "You kill and eat the "+self.battle_animal.name+"."
 			# remove animal from list after killed so not rendered again
 			self.animalist.remove(self.battle_animal)

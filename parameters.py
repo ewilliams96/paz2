@@ -23,4 +23,4 @@ IN_PROG = -1
 
 ANIMAL_TYPES = ['bird', 'pig', 'seal']
 
-FAT_DECREASE_RATE = 4
+FAT_DECREASE_RATE = 6
